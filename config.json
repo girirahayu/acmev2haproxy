@@ -1,0 +1,29 @@
+{
+  "domain": [
+    "cips.id",
+    "api.squad.cips.id",
+    "qnock.cips.id",
+    "spotlight.cips.id",
+    "dashboard.squad.cips.id",
+    "sencillo.cips.id",
+    "hearsay.cips.id",
+    "sdk.cips.id",
+    "api.cips.id",
+    "squad.cips.id",
+    "data-service.sencillo.id",
+    "sencillo.id",
+    "thumb.spotlight.id",
+    "dashboard.spotlight.id",
+    "api.spotlight.id",
+    "spotlight.id",
+    "hearsay.id",
+    "api.hearsay.id",
+    "dashboard.hearsay.id",
+    "api.sandbox.hearsay.id",
+    "www.halaza.id",
+    "halaza.id",
+    "market.halaza.id"
+  ],
+  "ssl_path": "/var/lib/acme/haproxy",
+  "certbot_path": "/usr/bin/certbot"
+}
