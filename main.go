@@ -18,6 +18,7 @@ type Config struct {
 	Domain      []string `json:"domain"`
 	SslPath     string   `json:"ssl_path"`
 	CertbotPath string   `json:"certbot_path"`
+	Email		string	 `json:"email"`
 }
 
 func RunCMD(path string, args []string, debug bool) (out string, err error) {
@@ -56,7 +57,7 @@ func main(){
 
 		if _, e := os.Stat("/etc/letsencrypt/live/" + configs.Domain[i] + "/fullchain.pem"); os.IsNotExist(e) {
 
-			args := []string{"certonly", "--standalone", "--agree-tos", "--email","admin@codigo.id", "--http-01-port=402", "-d", configs.Domain[i]}
+			args := []string{"certonly", "--standalone", "--agree-tos", "--email", configs.Email, "--http-01-port=402", "-d", configs.Domain[i]}
 			//output, err := RunCMD("ls", args, true)
 			output, ee := RunCMD(configs.CertbotPath, args, true)
 			dt := time.Now()

@@ -24,6 +24,7 @@
     "halaza.id",
     "market.halaza.id"
   ],
+  "email": "admin@codigo.id",
   "ssl_path": "/var/lib/acme/haproxy",
   "certbot_path": "/usr/bin/certbot"
 }
