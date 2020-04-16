@@ -61,52 +61,44 @@ func main(){
 			output, ee := RunCMD(configs.CertbotPath, args, true)
 			dt := time.Now()
 
-
 			if ee != nil {
-				f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
+				f.WriteString(dt.Format("January 02, 2006 15:04:05 Monday") + "\n")
 				f.WriteString(output+"\n")
 			}else{
 
-				f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
+				f.WriteString(dt.Format("January 02, 2006 15:04:05 Monday") + "\n")
 				f.WriteString(output+"\n")
 
-				args := []string{configs.Domain[i]+" "+configs.SslPath}
-				output, er := RunCMD("./combine.sh", args, true)
+				fcert, _ := os.Create(configs.SslPath + "/" +configs.Domain[i])
+				cert, _ := ioutil.ReadFile("/etc/letsencrypt/live/" + configs.Domain[i] + "/fullchain.pem")
+				key, _ := ioutil.ReadFile("/etc/letsencrypt/live/" + configs.Domain[i] + "/privkey.pem")
+				fcert.WriteString(string(cert) + string(key))
 				dt := time.Now()
+				if _, e := os.Stat(configs.SslPath + "/" + configs.Domain[i]); !os.IsNotExist(e) {
 
-				if er != nil {
-					f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
-					f.WriteString(output+"\n")
-				}else{
-					if _, e := os.Stat(configs.SslPath + "/" + configs.Domain[i]); !os.IsNotExist(e) {
-						f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
-						f.WriteString(configs.Domain[i] + " Combine Aman.\n")
-					}
+					f.WriteString(dt.Format("January 02, 2006 15:04:05 Monday") + "\n")
+					f.WriteString(configs.Domain[i]+" allready combined\n")
 				}
-			}
 
+			}
 
 
 		}else{
 
-			args := []string{configs.Domain[i]+" "+configs.SslPath}
-			output, er := RunCMD("./combine.sh", args, true)
+			fcert, _ := os.Create(configs.SslPath + "/" +configs.Domain[i])
+			cert, _ := ioutil.ReadFile("/etc/letsencrypt/live/" + configs.Domain[i] + "/fullchain.pem")
+			key, _ := ioutil.ReadFile("/etc/letsencrypt/live/" + configs.Domain[i] + "/privkey.pem")
+			fcert.WriteString(string(cert) + string(key))
 			dt := time.Now()
+			if _, e := os.Stat(configs.SslPath + "/" + configs.Domain[i]); !os.IsNotExist(e) {
 
-			if er != nil {
-				f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
-				f.WriteString(output+"\n")
-			}else{
-				if _, e := os.Stat(configs.SslPath + "/" + configs.Domain[i]); !os.IsNotExist(e) {
-					f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
-					f.WriteString(output+"\n")
+				f.WriteString(dt.Format("January 02, 2006 15:04:05 Monday") + "\n")
+					f.WriteString(configs.Domain[i]+" allready combined\n")
 				}
-			}
+
 
 		}
 
-
-		//}
 		defer f.Close()
 	}
 
