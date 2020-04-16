@@ -35,6 +35,7 @@ func RunCMD(path string, args []string, debug bool) (out string, err error) {
 	return
 }
 
+
 func main(){
 	jsonFile, e := os.Open("config.json")
 	if e != nil {
@@ -55,35 +56,55 @@ func main(){
 
 		if _, e := os.Stat("/etc/letsencrypt/live/" + configs.Domain[i] + "/fullchain.pem"); os.IsNotExist(e) {
 
-			args := []string{"certonly", "--standalone","--preferred-challenges"," http"," --http-01-port","402", "-d", configs.Domain[i]}
+			args := []string{"certonly", "--standalone", "--agree-tos", "--email","admin@codigo.id", "--http-01-port=402", "-d", configs.Domain[i]}
 			//output, err := RunCMD("ls", args, true)
-			output, _ := RunCMD(configs.CertbotPath, args, true)
+			output, ee := RunCMD(configs.CertbotPath, args, true)
 			dt := time.Now()
 
 
-			fmt.Println(output)
-			f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
-			f.WriteString(output)
-			f.WriteString("\n")
+			if ee != nil {
+				f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
+				f.WriteString(output+"\n")
+			}else{
+
+				f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
+				f.WriteString(output+"\n")
+
+				args := []string{configs.SslPath+" "+configs.Domain[i]}
+				output, er := RunCMD("./combine.sh", args, true)
+				dt := time.Now()
+
+				if er != nil {
+					f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
+					f.WriteString(output+"\n")
+				}else{
+					if _, e := os.Stat(configs.SslPath + "/" + configs.Domain[i]); !os.IsNotExist(e) {
+						f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
+						f.WriteString(configs.Domain[i] + " Combine Aman.\n")
+					}
+				}
+			}
+
+
 
 		}else{
 
-			args := []string{"/etc/letsencrypt/live/" + configs.Domain[i] + "/fullchain.pem","/etc/letsencrypt/live/" +
-				configs.Domain[i] + "/privkey.pem",">",configs.SslPath+"/"+configs.Domain[i]}
-			//output, err := RunCMD("ls", args, true)
-			output, _ := RunCMD("cat", args, true)
+			args := []string{configs.SslPath+" "+configs.Domain[i]}
+			output, er := RunCMD("./combine.sh", args, true)
 			dt := time.Now()
-			fmt.Println(output)
-			f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
-			f.WriteString(output)
-			f.WriteString("\n")
+
+			if er != nil {
+				f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
+				f.WriteString(output+"\n")
+			}else{
+				if _, e := os.Stat(configs.SslPath + "/" + configs.Domain[i]); !os.IsNotExist(e) {
+					f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
+					f.WriteString(output+"\n")
+				}
+			}
 
 		}
 
-		//if err != nil {
-		//	f.WriteString(dt.Format("01-02-2006 15:04:05"))
-		//	f.WriteString(output)
-		//} else {
 
 		//}
 		defer f.Close()
