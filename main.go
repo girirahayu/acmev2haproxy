@@ -70,7 +70,7 @@ func main(){
 				f.WriteString(dt.Format("01-01-2020 15:04:05 Monday") + "\n")
 				f.WriteString(output+"\n")
 
-				args := []string{configs.SslPath+" "+configs.Domain[i]}
+				args := []string{configs.Domain[i]+" "+configs.SslPath}
 				output, er := RunCMD("./combine.sh", args, true)
 				dt := time.Now()
 
@@ -89,7 +89,7 @@ func main(){
 
 		}else{
 
-			args := []string{configs.SslPath+" "+configs.Domain[i]}
+			args := []string{configs.Domain[i]+" "+configs.SslPath}
 			output, er := RunCMD("./combine.sh", args, true)
 			dt := time.Now()
 
